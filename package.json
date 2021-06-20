@@ -1,0 +1,26 @@
+{
+  "name": "presence",
+  "version": "1.0.0",
+  "description": "Copy Steam's rich presence to Discord using given profiles.",
+  "main": "index.js",
+  "dependencies": {
+    "bytebuffer": "^5.0.1",
+    "discord-rpc": "^4.0.1",
+    "dotenv": "^10.0.0",
+    "steam": "^1.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ramadan8/Presence.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ramadan8/Presence/issues"
+  },
+  "author": "ramadan8",
+  "license": "MIT"
+}
