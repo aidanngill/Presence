@@ -1,6 +1,8 @@
-const ByteBuffer = require("bytebuffer");
 const Steam = require("steam");
+const SteamTotp = require("steam-totp");
+const ByteBuffer = require("bytebuffer");
 const VDF = require(require.resolve("steam") + ("\\..\\VDF.js"));
+const yargs = require("yargs");
 
 const localUtil = require("./util.js");
 const discordClient = require("./discord.js");
@@ -10,11 +12,31 @@ const steamUser = new Steam.SteamUser(steamClient);
 
 const allGames = localUtil.loadAllGames("games");
 
+const argv = yargs(process.argv).argv;
+
 steamClient.on("connected", () => {
-  steamUser.logOn({
+  let data = {
     account_name: process.env.STEAM_USERNAME,
     password: process.env.STEAM_PASSWORD
-  });
+  }
+
+  if (argv.totp) {
+    data.two_factor_code = argv.totp;
+  } else if (process.env.STEAM_SECRET) {
+    SteamTotp.getTimeOffset((authError, authOffset) => {
+      if (authError !== null) {
+        console.error(authError);
+        authOffset = 0;
+      }
+
+      data.two_factor_code = SteamTotp.getAuthCode(
+        process.env.STEAM_SECRET,
+        authOffset
+      );
+    });
+  }
+
+  steamUser.logOn(data);
 });
 
 steamClient.on("disconnected", () => {
