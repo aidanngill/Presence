@@ -22,11 +22,11 @@ STEAM_PASSWORD = "your_steam_password"
 
 You may type the following command to start Presence in the background. `--no-autorestart` acts as a safety net to not spam Steam's API with login requests.
 
-`pm2 start index.js --no-autorestart`
+`npm start`
 
 If you have a `shared_secret` from SDA or your phone, you may add it as the `STEAM_SECRET` environment variable. Otherwise, you should start the script with the `--totp 12345` argument, replacing `12345` with your *current* Steam guard code. For pm2 this will be as follows.
 
-`pm2 start index.js --no-autorestart -- --totp 12345`
+`pm2 start index.js --no-autorestart --name presence -- --totp 12345`
 
 ## Profiles
 All profiles are in the `./presence/games/` directory and listed briefly below. Please make a suitable pull request if you'd like to add more profiles.

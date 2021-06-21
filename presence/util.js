@@ -1,5 +1,14 @@
 const fs = require("fs");
 const path = require("path");
+const yargs = require("yargs");
+
+const argv = yargs(process.argv).argv;
+
+const discordAppId = (
+  process.env.DISCORD_APP_ID
+  ? process.env.DISCORD_APP_ID
+  : "855893326989361213"
+);
 
 const lowerDictionary = (dict) => {
   let key, keys = Object.keys(dict);
@@ -28,5 +37,7 @@ const loadAllGames = (directory) => {
 
 module.exports = {
   lowerDictionary: lowerDictionary,
-  loadAllGames: loadAllGames
+  loadAllGames: loadAllGames,
+  discordAppId: discordAppId,
+  argv: argv
 };
