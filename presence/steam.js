@@ -45,19 +45,33 @@ steamClient.on("disconnected", () => {
 
 steamClient.on("logOnResponse", (resp) => {
   if (resp.eresult == Steam.EResult.OK) {
+    let lastSet = null;
     console.log(`[Steam] Logged in as ${process.env.STEAM_USERNAME}`);
 
     allGames.forEach((game) => {
       game.rpc = new Steam.SteamRichPresence(steamClient, game.steamID);
+      game.previousData = Buffer.alloc(1);
+
       game.rpc.on("info", (data) => {
         data.rich_presence.forEach((event) => {
+          if (lastSet !== null && lastSet >= Date.now() - 15e3)
+            return;
+
           if (event.steamid_user !== steamClient.steamID.toString())
             return;
 
           if (event.rich_presence_kv.byteLength === 0)
             return;
 
+          lastSet = Date.now();
+
           const rpBuffer = data.rich_presence[0].rich_presence_kv;
+
+          if (Buffer.compare(game.previousData, rpBuffer) === 0)
+            return;
+
+          game.previousData = rpBuffer;
+
           const rpWrapped = ByteBuffer.wrap(rpBuffer);
           const rpData = localUtil.lowerDictionary(VDF.decode(rpWrapped).RP);
 
@@ -70,7 +84,7 @@ steamClient.on("logOnResponse", (resp) => {
     });
 
     updateSteamPresences();
-    setInterval(updateSteamPresences, 15e3);
+    setInterval(updateSteamPresences, 5e3);
   } else {
     console.error(`[Steam] Failed to login as ${process.env.STEAM_USERNAME}`);
   }
