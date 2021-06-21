@@ -8,7 +8,7 @@ module.exports = {
     discordRp.largeImageKey = "tu-logo-clean";
 
     if (data.map) {
-      if (data.round) {
+      if (data.round && data.map !== "MainMenu") {
         discordRp.details = data.map;
 
         if (data.steam_display.includes("Waiting")) {
