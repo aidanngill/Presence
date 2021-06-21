@@ -63,13 +63,12 @@ steamClient.on("logOnResponse", (resp) => {
           if (event.rich_presence_kv.byteLength === 0)
             return;
 
-          lastSet = Date.now();
-
           const rpBuffer = data.rich_presence[0].rich_presence_kv;
 
           if (Buffer.compare(game.previousData, rpBuffer) === 0)
             return;
 
+          lastSet = Date.now();
           game.previousData = rpBuffer;
 
           const rpWrapped = ByteBuffer.wrap(rpBuffer);
