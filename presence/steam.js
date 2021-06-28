@@ -18,17 +18,7 @@ steamClient.on("connected", () => {
   }
 
   if (process.env.STEAM_SECRET) {
-    SteamTotp.getTimeOffset((authError, authOffset) => {
-      if (authError !== null) {
-        console.error(authError);
-        authOffset = 0;
-      }
-
-      data.two_factor_code = SteamTotp.getAuthCode(
-        process.env.STEAM_SECRET,
-        authOffset
-      );
-    });
+    data.two_factor_code = SteamTotp.getAuthCode(process.env.STEAM_SECRET);
   } else if (localUtil.argv.totp) {
     data.two_factor_code = localUtil.argv.totp;
   }
